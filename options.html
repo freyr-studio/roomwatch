@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Roomwatch</title>
+  <link rel="stylesheet" href="options.css">
+  <link rel="stylesheet" href="themes.css">
+</head>
+<body>
+<header class="top">
+  <img src="icons/icon48.png" alt="">
+  <span class="brand">Roomwatch</span><span class="sep">–</span><span>Paramètres</span>
+</header>
+<div class="layout">
+  <nav>
+    <a href="#" data-sec="notifs" class="active">Notifications</a>
+    <a href="#" data-sec="sound">Son</a>
+    <a href="#" data-sec="sync">Synchronisation</a>
+    <a href="#" data-sec="update">Mise à jour</a>
+    <a href="#" data-sec="account">Compte</a>
+    <a id="support-link" href="#" hidden>♥ Support me</a>
+  </nav>
+
+  <main>
+    <!-- ===== Notifications ===== -->
+    <section id="sec-notifs">
+      <label class="toggle-row"><span>Activer les notifications</span><input type="checkbox" class="switch" data-s="notify"></label>
+      <label class="toggle-row"><span>Filtrer les notifications par room</span><input type="checkbox" class="switch" data-s="filterByRoom"></label>
+
+      <div id="rooms-wrap">
+        <div class="rooms-bar">
+          <input id="rq" type="search" placeholder="Rechercher une room">
+          <div id="rg" class="pills"></div>
+          <select id="rf">
+            <option value="all">Toutes</option>
+            <option value="live">En live</option>
+            <option value="sel">Sélectionnées</option>
+          </select>
+        </div>
+        <div class="rooms-actions">
+          <button id="sel-none" class="link">Sélectionner aucun</button>
+          <button id="sel-all" class="link">Sélectionner tout</button>
+          <span id="sel-count" class="muted"></span>
+        </div>
+        <p id="rooms-note" class="note" hidden></p>
+        <div id="rooms" class="rooms-grid"></div>
+      </div>
+    </section>
+
+    <!-- ===== Son ===== -->
+    <section id="sec-sound" hidden>
+      <h2>Sons des notifications</h2>
+
+      <div class="group">
+        <h3>Notification de live</h3>
+        <label class="toggle-row"><span>Son</span>
+          <select id="o-sound" data-s="sound">
+            <option value="system">Son système</option>
+            <option value="none">Aucun son</option>
+          </select>
+        </label>
+        <label class="toggle-row"><span>Volume</span><input type="range" id="o-vol" min="5" max="100" data-s="volume"></label>
+        <div class="actions"><button id="o-preview" class="btn ghost">Écouter</button></div>
+      </div>
+
+      <div class="group">
+        <h3>Notification de retour</h3>
+        <label class="toggle-row"><span>Son</span>
+          <select id="o-sound-return" data-s="returnSound">
+            <option value="system">Son système</option>
+            <option value="none">Aucun son</option>
+          </select>
+        </label>
+        <label class="toggle-row"><span>Volume</span><input type="range" id="o-vol-return" min="5" max="100" data-s="returnVolume"></label>
+        <div class="actions"><button id="o-preview-return" class="btn ghost">Écouter</button></div>
+      </div>
+
+      <div class="group">
+        <h3>Mes propres sons</h3>
+        <p class="muted">Ajoute tes fichiers audio (mp3, wav, ogg…) : 1 Mo maximum chacun, 5 sons au plus. Ils restent sur cet ordinateur.</p>
+        <div class="actions">
+          <label class="btn ghost filebtn">Ajouter un fichier audio…<input type="file" id="o-file" accept="audio/*" multiple hidden></label>
+          <span id="o-sound-status" class="muted"></span>
+        </div>
+        <div id="o-sounds"></div>
+      </div>
+    </section>
+
+    <!-- ===== Synchronisation ===== -->
+    <section id="sec-sync" hidden>
+      <h2>Synchronisation</h2>
+
+      <div class="group">
+        <h3>Sauvegarde dans un fichier</h3>
+        <p class="muted">Exporte tes favoris, tes listes AFK et Follow et tes réglages, puis importe le fichier sur un autre PC.</p>
+        <div class="actions">
+          <button id="f-export" class="btn">Exporter dans un fichier</button>
+          <label class="btn ghost filebtn">Importer un fichier…<input type="file" id="f-import" accept=".json,application/json" hidden></label>
+          <label class="check"><input type="checkbox" id="f-replace"> Remplacer au lieu de fusionner</label>
+        </div>
+        <p id="f-status" class="muted"></p>
+      </div>
+
+      <details class="group more-box" id="sync-advanced">
+        <summary>Options avancées</summary>
+        <h3>Synchronisation automatique (optionnelle)</h3>
+        <p class="muted">Un fichier JSON est tenu à jour sur un serveur WebDAV (NAS, Nextcloud…). Chaque PC le lit et le met à jour tout seul. Utilise un compte et un fichier qui ne servent qu'à toi : ne partage jamais le même fichier entre plusieurs personnes, il serait écrasé.</p>
+        <div class="form">
+          <label>Adresse du fichier<input id="s-url" type="url" placeholder="https://serveur.exemple/dav/roomwatch.json"></label>
+          <label>Utilisateur<input id="s-user" type="text" autocomplete="off"></label>
+          <label>Mot de passe<input id="s-pass" type="password" autocomplete="new-password"></label>
+        </div>
+        <div class="actions">
+          <button id="s-save" class="btn">Enregistrer et activer</button>
+          <button id="s-now" class="btn ghost">Synchroniser maintenant</button>
+          <button id="s-off" class="btn ghost">Désactiver</button>
+        </div>
+        <p id="s-status" class="muted"></p>
+      </details>
+    </section>
+
+    <!-- ===== Mise à jour ===== -->
+    <section id="sec-update" hidden>
+      <h2>Mise à jour de l'extension</h2>
+      <p class="muted">L'extension vérifie toute seule si une nouvelle version est disponible (toutes les 6 h) et te prévient.</p>
+      <div class="card"><span id="u-ver"></span></div>
+      <p id="u-info" class="muted"></p>
+
+      <div class="group">
+        <h3>Installer la dernière version</h3>
+        <ol class="steps">
+          <li>Télécharge le fichier zip de la dernière version.</li>
+          <li>Décompresse-le dans le dossier de l'extension, en remplaçant les fichiers existants.</li>
+          <li>Ouvre chrome://extensions et clique sur le bouton de rechargement ⟳ de Roomwatch.</li>
+        </ol>
+        <div class="actions">
+          <button id="u-download" class="btn">Télécharger la dernière version</button>
+          <button id="u-check" class="btn ghost">Vérifier maintenant</button>
+        </div>
+      </div>
+
+      <details class="group more-box">
+        <summary>Options avancées</summary>
+        <p class="muted">Mise à jour en un clic : choisis une fois le dossier où l'extension est chargée sur ce PC (celui qui contient manifest.json).</p>
+        <div class="form">
+          <label>Dossier des mises à jour<input id="u-url" type="url" placeholder="https://freyr-studio.github.io/roomwatch/"></label>
+        </div>
+        <p class="muted" id="u-effective"></p>
+        <div class="actions">
+          <button id="u-save" class="btn ghost">Enregistrer l'adresse</button>
+          <button id="u-reset" class="btn ghost">Réinitialiser</button>
+        </div>
+        <div class="actions">
+          <button id="u-pick" class="btn ghost">Choisir le dossier de l'extension…</button>
+          <span id="u-dir" class="muted"></span>
+        </div>
+        <div class="actions"><button id="u-apply" class="btn">Mettre à jour maintenant</button></div>
+      </details>
+      <p id="u-status" class="muted"></p>
+    </section>
+
+    <!-- ===== Compte ===== -->
+    <section id="sec-account" hidden>
+      <h2>Compte Chaturbate</h2>
+      <div class="card">
+        <span id="acc-badge" class="dot"></span>
+        <span id="acc-text">Vérification…</span>
+        <button id="acc-login" class="btn" hidden>Connexion avec Chaturbate</button>
+      </div>
+      <p id="acc-info" class="muted"></p>
+      <p id="acc-warn" class="note" hidden></p>
+      <div class="actions">
+        <button id="sync" class="btn">Synchroniser mes abonnements</button>
+        <span id="sync-status" class="muted"></span>
+      </div>
+
+      <h3>Diagnostic</h3>
+      <p class="muted">Si ta liste complète d'abonnements (y compris hors ligne) n'apparaît pas, lance le diagnostic : le rapport ne contient aucun pseudo.</p>
+      <div class="actions">
+        <button id="diag" class="btn ghost">Lancer le diagnostic</button>
+        <button id="diag-copy" class="btn ghost" hidden>Copier le rapport</button>
+      </div>
+      <pre id="diag-out" hidden></pre>
+    </section>
+  </main>
+</div>
+<script type="module" src="options.js"></script>
+</body>
+</html>

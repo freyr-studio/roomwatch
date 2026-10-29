@@ -1,0 +1,5 @@
+/* Apparences : variantes de couleur sobres (le thème par défaut est défini dans popup.css / options.css) */
+body[data-theme="midnight"] { --bg: #161b2e; --side: #11152a; --surface: #202741; --border: #2d3659; --text: #e5e9f6; --muted: #8f9abb; --accent: #6b8cff; --accent-2: #9ab4ff; --link: #7cc4ff; }
+body[data-theme="graphite"] { --bg: #1c1d20; --side: #151618; --surface: #26282c; --border: #35383e; --text: #e7e8eb; --muted: #959aa4; --accent: #4fb3a3; --accent-2: #7fd0c2; --link: #80b8ff; }
+body[data-theme="forest"] { --bg: #17211d; --side: #111a16; --surface: #20302a; --border: #2d4338; --text: #e2ede7; --muted: #8ba499; --accent: #4fb477; --accent-2: #86d6a3; --link: #6cc7d8; }
+body[data-theme="oled"] { --bg: #000; --side: #000; --surface: #131313; --border: #262626; --text: #ececec; --muted: #8b8b8b; --accent: #f47321; --accent-2: #ffa000; --link: #5bb2ff; }

@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "Roomwatch",
+  "version": "1.0.0",
+  "description": "Live notifications, favorites and lists for your cam rooms: pause, discreet mode, themes, 4 languages.",
+  "permissions": [
+    "alarms",
+    "notifications",
+    "storage",
+    "offscreen",
+    "clipboardWrite"
+  ],
+  "host_permissions": [
+    "https://chaturbate.com/*",
+    "https://freyr-studio.github.io/*",
+    "https://github.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "options_page": "options.html",
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+F"
+      },
+      "description": "Ouvrir la fenêtre de Roomwatch"
+    },
+    "open-live-favorites": {
+      "suggested_key": {
+        "default": "Alt+Shift+O"
+      },
+      "description": "Ouvrir les favoris en live (5 maximum)"
+    },
+    "toggle-stealth": {
+      "suggested_key": {
+        "default": "Alt+Shift+H"
+      },
+      "description": "Mode discret (flouter l'extension, couper les sons)"
+    }
+  }
+}

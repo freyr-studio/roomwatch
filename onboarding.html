@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Roomwatch</title>
+  <link rel="stylesheet" href="options.css">
+  <link rel="stylesheet" href="themes.css">
+  <style>
+    body { display: flex; min-height: 100vh; align-items: center; justify-content: center; }
+    #wrap { width: 640px; max-width: 94vw; }
+    #card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px 32px; min-height: 330px; display: flex; flex-direction: column; }
+    #card img { width: 64px; height: 64px; }
+    #card h1 { margin: 12px 0 8px; font-size: 24px; color: var(--accent-2); }
+    #card p, #card li { color: var(--text); line-height: 1.5; font-size: 15px; }
+    #card ul { padding-left: 20px; }
+    #card .grow { flex: 1; }
+    #dots { display: flex; gap: 8px; justify-content: center; margin: 16px 0 0; }
+    #dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+    #dots i.on { background: var(--accent); }
+    #nav { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; }
+    #langbar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+    #langbar select { background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; }
+    kbd { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
+  </style>
+</head>
+<body>
+<div id="wrap">
+  <div id="langbar"><select id="lang"></select></div>
+  <div id="card"></div>
+  <div id="dots"></div>
+  <div id="nav">
+    <button id="prev" class="btn ghost">Précédent</button>
+    <button id="next" class="btn">Suivant</button>
+  </div>
+</div>
+<script type="module" src="onboarding.js"></script>
+</body>
+</html>

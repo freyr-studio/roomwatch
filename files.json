@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0",
+  "files": [
+    "background.js",
+    "config.js",
+    "files.json",
+    "i18n-dict.js",
+    "i18n.js",
+    "icons/icon128.png",
+    "icons/icon16.png",
+    "icons/icon32.png",
+    "icons/icon48.png",
+    "lib.js",
+    "manifest.json",
+    "offscreen.html",
+    "offscreen.js",
+    "onboarding.html",
+    "onboarding.js",
+    "options.css",
+    "options.html",
+    "options.js",
+    "patchnotes.js",
+    "popup.css",
+    "popup.html",
+    "popup.js",
+    "sounds.js",
+    "sync.js",
+    "themes.css",
+    "update.js"
+  ]
+}
