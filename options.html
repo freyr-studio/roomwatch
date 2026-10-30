@@ -127,21 +127,30 @@
       <p id="u-info" class="muted"></p>
 
       <div class="group">
-        <h3>Installer la dernière version</h3>
+        <h3>Mise à jour en un clic</h3>
+        <p class="muted">La première fois, le navigateur te demande le dossier où l'extension est chargée sur ce PC (celui qui contient manifest.json). Ensuite, tout est automatique.</p>
+        <div class="actions">
+          <button id="u-apply" class="btn">Mettre à jour maintenant</button>
+          <button id="u-check" class="btn ghost">Vérifier maintenant</button>
+        </div>
+        <div class="actions">
+          <button id="u-pick" class="btn ghost">Choisir le dossier de l'extension…</button>
+          <span id="u-dir" class="muted"></span>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3>Mise à jour manuelle</h3>
         <ol class="steps">
           <li>Télécharge le fichier zip de la dernière version.</li>
           <li>Décompresse-le dans le dossier de l'extension, en remplaçant les fichiers existants.</li>
           <li>Ouvre chrome://extensions et clique sur le bouton de rechargement ⟳ de Roomwatch.</li>
         </ol>
-        <div class="actions">
-          <button id="u-download" class="btn">Télécharger la dernière version</button>
-          <button id="u-check" class="btn ghost">Vérifier maintenant</button>
-        </div>
+        <div class="actions"><button id="u-download" class="btn ghost">Télécharger la dernière version</button></div>
       </div>
 
       <details class="group more-box">
         <summary>Options avancées</summary>
-        <p class="muted">Mise à jour en un clic : choisis une fois le dossier où l'extension est chargée sur ce PC (celui qui contient manifest.json).</p>
         <div class="form">
           <label>Dossier des mises à jour<input id="u-url" type="url" placeholder="https://freyr-studio.github.io/roomwatch/"></label>
         </div>
@@ -150,11 +159,6 @@
           <button id="u-save" class="btn ghost">Enregistrer l'adresse</button>
           <button id="u-reset" class="btn ghost">Réinitialiser</button>
         </div>
-        <div class="actions">
-          <button id="u-pick" class="btn ghost">Choisir le dossier de l'extension…</button>
-          <span id="u-dir" class="muted"></span>
-        </div>
-        <div class="actions"><button id="u-apply" class="btn">Mettre à jour maintenant</button></div>
       </details>
       <p id="u-status" class="muted"></p>
     </section>

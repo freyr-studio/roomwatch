@@ -415,6 +415,10 @@ $("u-check").onclick = async () => {
 $("u-apply").onclick = async () => {
   updMsg(tr("Installation…"));
   try {
+    if (!(await loadDirHandle())) { // première fois : on demande le dossier, puis on installe directement
+      try { await pickExtensionDir(); await renderUpdate(); }
+      catch (e) { return updMsg(e.name === "AbortError" ? "" : updError(e)); }
+    }
     const info = st.updateInfo && st.updateInfo.available ? st.updateInfo : await checkUpdate();
     if (!info.available) return updMsg(tr("À jour (v{v}).", { v: info.current }));
     await applyUpdate();

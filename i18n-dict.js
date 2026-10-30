@@ -1,5 +1,8 @@
 // Généré : traductions des textes de l'extension (clé = texte français). Anglais, russe, allemand.
 export const DICT = {
+  "Mise à jour en un clic": { en: "One-click update", ru: "Обновление в один клик", de: "Update mit einem Klick" },
+  "Mise à jour manuelle": { en: "Manual update", ru: "Ручное обновление", de: "Manuelles Update" },
+  "La première fois, le navigateur te demande le dossier où l'extension est chargée sur ce PC (celui qui contient manifest.json). Ensuite, tout est automatique.": { en: "The first time, the browser asks for the folder where the extension is loaded on this PC (the one containing manifest.json). After that, everything is automatic.", ru: "В первый раз браузер попросит папку, из которой загружено расширение на этом ПК (та, где лежит manifest.json). Дальше всё происходит автоматически.", de: "Beim ersten Mal fragt der Browser nach dem Ordner, aus dem die Erweiterung auf diesem PC geladen wird (der mit manifest.json). Danach läuft alles automatisch." },
   "Le bouton ? en bas de la fenêtre explique à quoi sert chaque bouton.": { en: "The ? button at the bottom of the window explains what each button does.", ru: "Кнопка ? внизу окна объясняет, для чего нужна каждая кнопка.", de: "Die ?-Schaltfläche unten im Fenster erklärt, wofür jede Schaltfläche da ist." },
   "Soutenir le projet": { en: "Support the project", ru: "Поддержать проект", de: "Projekt unterstützen" },
   "Aide : à quoi sert chaque bouton": { en: "Help: what each button does", ru: "Справка: для чего каждая кнопка", de: "Hilfe: wofür jede Schaltfläche da ist" },
