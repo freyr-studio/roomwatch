@@ -4,6 +4,19 @@ Live notifications and tidy lists for the cam rooms you follow. Roomwatch lives 
 
 ![Chrome](https://img.shields.io/badge/Chrome-supported-blue) ![Edge](https://img.shields.io/badge/Edge-supported-blue) ![Brave](https://img.shields.io/badge/Brave-supported-blue)
 
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/1-favorites.png" width="32%" alt="Favorites">
+  <img src="screenshots/2-follow.png" width="32%" alt="Follow">
+  <img src="screenshots/3-afk.png" width="32%" alt="AFK">
+</p>
+<p align="center">
+  <img src="screenshots/4-settings.png" width="80%" alt="Settings">
+</p>
+
+*Demo data: all names and thumbnails are fictional.*
+
 ## Features
 
 - **Favorites**: pick your best rooms and get a notification (and a sound) when they go live. Live rooms first, then offline rooms with their last broadcast time.
