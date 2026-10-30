@@ -746,6 +746,12 @@ function render() {
     $("open-all").disabled = n === 0;
   }
   $("afk-addbar").hidden = !(state.view === "watch" && state.favTab !== "fav" && !needLogin);
+  $("open-all-oth").hidden = !inFollow(); // « Tout ouvrir » aussi dans l'onglet Follow
+  if (inFollow()) {
+    const n = liveVisible().length;
+    $("open-all-oth").textContent = tr("Tout ouvrir ({n})", { n });
+    $("open-all-oth").disabled = n === 0;
+  }
   $("afk-add").placeholder = tr(state.favTab === "oth" ? "Ajouter des rooms Follow (pseudos ou liens)" : "Ajouter des rooms AFK (pseudos ou liens)");
   $("settings-view").hidden = !settings;
 
@@ -1045,12 +1051,14 @@ function addFavFrom(input) {
 $("fav-add-btn").onclick = () => addFavFrom($("fav-add"));
 $("fav-add").addEventListener("keydown", (e) => { if (e.key === "Enter") addFavFrom($("fav-add")); });
 
-$("open-all").onclick = () => { // ouvre toutes les rooms en live dans des onglets (en arrière-plan)
+const openAllLive = () => { // ouvre toutes les rooms en live dans des onglets (en arrière-plan)
   const rooms = liveVisible();
   if (!rooms.length) return;
   if (rooms.length > 5 && !window.confirm(tr("Ouvrir {n} rooms ?", { n: rooms.length }))) return;
   for (const room of rooms) chrome.tabs.create({ url: `https://chaturbate.com/${room.username}/`, active: false });
 };
+$("open-all").onclick = openAllLive;
+$("open-all-oth").onclick = openAllLive;
 for (const kind of ["female", "couple", "trans"]) { // pages « suivis » du site, par genre
   $("nav-g-" + kind).onclick = () => chrome.tabs.create({ url: `https://chaturbate.com/followed-cams/${kind}/` });
 }

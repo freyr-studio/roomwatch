@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Roomwatch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Live notifications, favorites and lists for your cam rooms: pause, discreet mode, themes, 4 languages.",
   "permissions": [
     "alarms",
