@@ -149,7 +149,7 @@ async function archiveCheck(s, force = false) {
 
   // complète au besoin la date du dernier live (texte du site, mis en cache 12 h)
   const api = { ...lastApi };
-  const queue = pool.filter((n) => !live.has(n) && !last[n] && !(api[n] && now - api[n].at < 12 * 3600e3)).slice(0, 60);
+  const queue = pool.filter((n) => !live.has(n) && !(api[n] && now - api[n].at < 12 * 3600e3)).slice(0, 60);
   const worker = async () => {
     while (queue.length) {
       const n = queue.shift();
@@ -206,7 +206,7 @@ async function checkReturns(s, force = false) {
   const res = await fetchRoomStatuses(afk);
   // date du dernier live des rooms AFK : texte du site, mis en cache 3 h
   const api = { ...lastApi };
-  const queue = afk.filter((n) => !last[n] && (force || !(api[n] && now - api[n].at < 3 * 3600e3))).slice(0, 30);
+  const queue = afk.filter((n) => force || !(api[n] && now - api[n].at < 3 * 3600e3)).slice(0, 30);
   const worker = async () => {
     while (queue.length) {
       const n = queue.shift();

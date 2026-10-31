@@ -1,7 +1,7 @@
 import { lastLiveEnd, fetchByGender, fetchLastBroadcast, fetchRoomStatuses, mergeStatuses, getSettings, saveSettings, DEFAULT_SETTINGS, GENDERS, genderKind, showKind } from "./lib.js";
 import { fillSoundSelect, previewSound } from "./sounds.js";
 import { syncNow, syncErrorText } from "./sync.js";
-import { checkUpdate, applyUpdate, loadDirHandle, updateErrorText } from "./update.js";
+import { checkUpdate, applyUpdate, loadDirHandle, updateErrorText, updateAvailable } from "./update.js";
 import { tr, setLang, resolveLang, captureI18n, applyI18n, getLang, LANGS } from "./i18n.js";
 import { CONFIG } from "./config.js";
 import { PATCH_NOTES } from "./patchnotes.js";
@@ -589,10 +589,15 @@ async function refreshStatuses(names, force = false) {
 // Récupère (au mieux) la date du dernier live des rooms jamais vues en live par l'extension
 async function fillLastBroadcasts() {
   const live = realLiveSet();
-  const fresh = (a) => a && Date.now() - a.at < 6 * 3600e3;
+  const fresh = (n) => { // texte du site encore valable ? (30 min si le dernier live date de moins de 3 jours, sinon 6 h)
+    const a = state.lastApi[n];
+    if (!a) return false;
+    const end = offlineEnd(n);
+    return Date.now() - a.at < (end !== null && Date.now() - end < 3 * 864e5 ? 30 * 60e3 : 6 * 3600e3);
+  };
   const pool = state.favTab === "afk" ? state.afk : state.favTab === "oth" ? state.others : offlineNames();
   const queue = pool
-    .filter((n) => !live.has(n) && !isActiveStatus(statusOf(n)) && !state.last[n] && !fresh(state.lastApi[n]) && !bioPending.has(n))
+    .filter((n) => !live.has(n) && !isActiveStatus(statusOf(n)) && !fresh(n) && !bioPending.has(n))
     .slice(0, 20);
   if (!queue.length) return;
   queue.forEach((n) => bioPending.add(n));
@@ -708,7 +713,7 @@ const fmtClock = (ms) => new Date(ms).toLocaleTimeString([], { hour: "2-digit", 
 
 function renderFooter() {
   $("version").textContent = "v" + chrome.runtime.getManifest().version;
-  const u = state.updateInfo, avail = !!(u && u.available);
+  const u = state.updateInfo, avail = updateAvailable(u);
   $("foot-update").classList.toggle("avail", avail);
   $("foot-update").title = avail ? tr("Installer la version {v}", { v: u.latest }) : tr("Chercher une mise à jour");
   const muted = (state.settings.mutedUntil || 0) > Date.now();
@@ -1115,7 +1120,7 @@ $("foot-update").onclick = async () => {
   try {
     footMsg(tr("Recherche…"), 20000);
     let info = state.updateInfo;
-    if (!info || !info.available) { info = await checkUpdate(); load(); }
+    if (!info || !updateAvailable(info)) { info = await checkUpdate(); load(); }
     if (!info.available) return footMsg(tr("À jour (v{v})", { v: info.current }));
     // l'installation se fait dans un onglet (le popup se ferme dès qu'il perd le focus et interromprait l'écriture des fichiers)
     footMsg(tr("v{v} disponible : voir la marche à suivre", { v: info.latest }), 8000);

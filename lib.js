@@ -284,15 +284,26 @@ export function parseAgoMs(text) {
 }
 
 // Moment (ms) du dernier live d'une room : suivi par l'extension, sinon texte du site ; null si inconnu
+// Précision (ms) d'un texte « 21 hours ago » : la plus petite unité citée
+function agoPrecisionMs(text) {
+  let p = Infinity;
+  for (const m of String(text).matchAll(/(?:\d+|an?)\s*(second|sec|minute|min|hour|day|week|month|year)s?/gi)) p = Math.min(p, AGO_UNITS[m[1].toLowerCase()]);
+  return p === Infinity ? 0 : p;
+}
+
+// Quand la room a diffusé alors que le navigateur était fermé, le suivi de l'extension est périmé :
+// on prend donc la date la plus récente des deux sources (le texte du site n'est retenu que s'il est
+// plus récent que le suivi de plus que sa propre précision, pour ne pas « rajeunir » une date exacte).
 export function lastLiveEnd(name, last = {}, lastApi = {}) {
-  if (last[name]) return last[name].end;
+  const tracked = last[name] ? last[name].end : null;
+  let fromApi = null, prec = 0;
   const a = lastApi[name];
   if (a && a.text) {
-    if (/^\d{4}-\d\d-\d\d/.test(a.text)) { const t = Date.parse(a.text); return Number.isNaN(t) ? null : t; }
-    const ms = parseAgoMs(a.text);
-    return ms === null ? null : a.at - ms;
+    if (/^\d{4}-\d\d-\d\d/.test(a.text)) { const t = Date.parse(a.text); fromApi = Number.isNaN(t) ? null : t; prec = /^\d{4}-\d\d-\d\d$/.test(a.text) ? 864e5 : 0; }
+    else { const ms = parseAgoMs(a.text); fromApi = ms === null ? null : a.at - ms; prec = agoPrecisionMs(a.text); }
   }
-  return null;
+  if (tracked !== null && fromApi !== null) return fromApi - tracked > prec ? fromApi : tracked;
+  return tracked !== null ? tracked : fromApi;
 }
 
 // ---------- Icônes de genre et étiquettes de statut ----------

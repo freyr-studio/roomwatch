@@ -3,14 +3,14 @@ import { fillSoundSelect, previewSound } from "./sounds.js";
 import { syncNow, buildBackup, applyBackup, syncErrorText } from "./sync.js";
 import { tr, setLang, resolveLang, captureI18n, applyI18n } from "./i18n.js";
 import { CONFIG } from "./config.js";
-import { checkUpdate, applyUpdate, pickExtensionDir, loadDirHandle, currentVersion, updateErrorText, updateBase } from "./update.js";
+import { checkUpdate, applyUpdate, pickExtensionDir, loadDirHandle, currentVersion, updateErrorText, updateBase, updateAvailable } from "./update.js";
 
 const $ = (id) => document.getElementById(id);
 captureI18n();
 const LOGIN_URL = "https://chaturbate.com/auth/login/";
 
 const st = {
-  following: [], rooms: [], watch: [], settings: {}, customSounds: [], syncCfg: null, syncMeta: null, updateInfo: null, updateCfg: null,
+  following: [], rooms: [], watch: [], settings: {}, customSounds: [], syncCfg: null, syncMeta: null, updateInfo: null, updateCfg: null, updateTimings: null,
   error: null, info: null, at: 0, updatedAt: 0,
   g: null, filter: "all", q: "",
 };
@@ -19,7 +19,7 @@ let lastReport = null;
 
 /* ---------- données ---------- */
 async function load() {
-  const s = await chrome.storage.local.get(["following", "followingAt", "followingInfo", "rooms", "watch", "error", "updatedAt", "customSounds", "syncCfg", "syncMeta", "updateInfo", "updateCfg"]);
+  const s = await chrome.storage.local.get(["following", "followingAt", "followingInfo", "rooms", "watch", "error", "updatedAt", "customSounds", "syncCfg", "syncMeta", "updateInfo", "updateCfg", "updateTimings"]);
   st.following = s.following || [];
   st.at = s.followingAt || 0;
   st.info = s.followingInfo || null;
@@ -29,6 +29,7 @@ async function load() {
   st.syncCfg = s.syncCfg || null;
   st.syncMeta = s.syncMeta || null;
   st.updateInfo = s.updateInfo || null;
+  st.updateTimings = s.updateTimings || null;
   st.updateCfg = s.updateCfg || null;
   st.error = s.error || null;
   st.updatedAt = s.updatedAt || 0;
@@ -238,7 +239,7 @@ chrome.storage.onChanged.addListener(async (ch, area) => {
   if (ch.rooms) { st.rooms = ch.rooms.newValue || []; refreshLive(); renderAccount(); }
   if (ch.watch) { st.watch = ch.watch.newValue || []; refreshChecks(); }
   if (ch.settings) { st.settings = await getSettings(); renderAll(); }
-  if (ch.updateInfo || ch.updateCfg) { await load(); renderUpdate(); }
+  if (ch.updateInfo || ch.updateCfg || ch.updateTimings) { await load(); renderUpdate(); }
   if (ch.customSounds || ch.syncMeta || ch.syncCfg) { await load(); renderSettings(); renderSound(); renderSync(); }
 });
 
@@ -375,7 +376,9 @@ async function renderUpdate() {
   if (st.updateCfg && st.updateCfg.url) $("u-url").value = st.updateCfg.url;
   $("u-info").textContent = !u ? tr("Pas encore vérifié.")
     : u.error ? tr("Dernière vérification : {e}", { e: updateErrorText(u.error) })
-    : u.available ? tr("Version v{v} disponible.", { v: u.latest }) : tr("À jour (dernière version : v{v}).", { v: u.latest });
+    : updateAvailable(u) ? tr("Version v{v} disponible.", { v: u.latest }) : tr("À jour (dernière version : v{v}).", { v: u.latest });
+  const tm = st.updateTimings;
+  if (tm) $("u-info").textContent += " " + tr("Dernière installation : v{v} (téléchargement {d} s, écriture {w} s, {n} fichiers).", { v: tm.version, d: (tm.downloadMs / 1000).toFixed(1), w: (tm.writeMs / 1000).toFixed(1), n: tm.files });
   try { $("u-effective").textContent = tr("Adresse utilisée : {a}", { a: (await updateBase()).base }); } catch { $("u-effective").textContent = ""; }
   const dir = await loadDirHandle();
   $("u-dir").textContent = dir ? tr("Dossier choisi : {d}", { d: dir.name }) : tr("Aucun dossier choisi.");
@@ -419,7 +422,7 @@ $("u-apply").onclick = async () => {
       try { await pickExtensionDir(); await renderUpdate(); }
       catch (e) { return updMsg(e.name === "AbortError" ? "" : updError(e)); }
     }
-    const info = st.updateInfo && st.updateInfo.available ? st.updateInfo : await checkUpdate();
+    const info = st.updateInfo && updateAvailable(st.updateInfo) ? st.updateInfo : await checkUpdate();
     if (!info.available) return updMsg(tr("À jour (v{v}).", { v: info.current }));
     await applyUpdate();
   } catch (e) { updMsg(tr("Erreur : {e}", { e: updError(e) })); }
